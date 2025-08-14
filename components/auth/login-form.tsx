@@ -14,23 +14,21 @@ export default function LoginForm() {
   const [error, setError] = useState("")
   const router = useRouter()
 
-  async function handleSubmit(formData: FormData) {
-    setIsLoading(true)
-    setError("")
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+  setError("")
+  setIsLoading(true)
 
-    try {
-      const result = await signInAction(formData)
-      if (result.success) {
-        router.push("/")
-      } else {
-        setError(result.error || "Login failed")
-      }
-    } catch (err) {
-      setError("An unexpected error occurred")
-    } finally {
-      setIsLoading(false)
-    }
+  const formData = new FormData(e.target as HTMLFormElement)
+  const result = await signInAction(formData)
+  
+  setIsLoading(false)
+  
+  if (result?.error) {
+    setError(result.error)
   }
+  // If no error, the server action will handle the redirect
+}
 
   return (
     <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
