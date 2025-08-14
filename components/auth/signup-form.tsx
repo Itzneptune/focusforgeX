@@ -15,25 +15,21 @@ export default function SignUpForm() {
   const [success, setSuccess] = useState("")
   const router = useRouter()
 
-  async function handleSubmit(formData: FormData) {
-    setIsLoading(true)
-    setError("")
-    setSuccess("")
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+  setError("")
+  setIsLoading(true)
 
-    try {
-      const result = await signUpAction(formData)
-      if (result.success) {
-        setSuccess("Account created successfully! Redirecting...")
-        setTimeout(() => router.push("/"), 2000)
-      } else {
-        setError(result.error || "Sign up failed")
-      }
-    } catch (err) {
-      setError("An unexpected error occurred")
-    } finally {
-      setIsLoading(false)
-    }
+  const formData = new FormData(e.target as HTMLFormElement)
+  const result = await signUpAction(formData)
+  
+  setIsLoading(false)
+  
+  if (result?.error) {
+    setError(result.error)
   }
+  // If no error, the server action will handle the redirect
+}
 
   return (
     <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
