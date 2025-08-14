@@ -6,19 +6,20 @@ import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 
 export async function signInAction(formData: FormData) {
-  const email = formData.get("email") as string
-  const password = formData.get("password") as string
-
-  if (!email || !password) {
-    return { error: "Email and password are required" }
-  }
-
   try {
-    const { user, token } = await signIn(email, password)
-    setAuthCookie(token)
-    return { success: true, user }
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+    
+    const user = await signIn(email, password)
+    if (user) {
+      const token = await createJWT({ userId: user.id, email: user.email })
+      await setAuthCookie(token)
+      redirect('/')
+    }
+    
+    return { error: 'Invalid credentials' }
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Login failed" }
+    return { error: 'Login failed' }
   }
 }
 
