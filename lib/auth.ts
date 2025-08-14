@@ -121,13 +121,14 @@ export async function signIn(email: string, password: string): Promise<{ user: U
   return { user: userWithoutPassword, token }
 }
 
-export function setAuthCookie(token: string) {
+export async function setAuthCookie(token: string) {
   const cookieStore = cookies()
-  cookieStore.set("auth-token", token, {
+  cookieStore.set('auth-token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     maxAge: 60 * 60 * 24 * 7, // 7 days
+    path: '/'
   })
 }
 
