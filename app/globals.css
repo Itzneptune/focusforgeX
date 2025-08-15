@@ -2,6 +2,7 @@
 @import "tw-animate-css";
 
 :root {
+  /* Updated to new emerald green design system */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -38,54 +39,43 @@
 }
 
 .dark {
-  /* Updated to pure jet black background with adjusted contrast colors */
-  --background: oklch(0 0 0); /* Pure black */
-  --foreground: oklch(1 0 0); /* Pure white */
-  --card: oklch(0.05 0 0); /* Very dark gray for cards */
-  --card-foreground: oklch(1 0 0);
-  --popover: oklch(0.05 0 0);
-  --popover-foreground: oklch(1 0 0);
-  --primary: oklch(1 0 0); /* White primary */
-  --primary-foreground: oklch(0 0 0); /* Black text on white */
-  --secondary: oklch(0.1 0 0); /* Dark gray secondary */
-  --secondary-foreground: oklch(1 0 0);
-  --muted: oklch(0.08 0 0); /* Slightly lighter than background */
-  --muted-foreground: oklch(0.7 0 0); /* Light gray text */
-  --accent: oklch(0.1 0 0);
-  --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.5 0.2 25); /* Red destructive */
-  --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.15 0 0); /* Dark border */
-  --input: oklch(0.08 0 0); /* Dark input background */
-  --ring: oklch(0.3 0 0); /* Focus ring */
-  --chart-1: oklch(0.6 0.2 0); /* Red chart color */
-  --chart-2: oklch(0.8 0 0); /* White chart color */
-  --chart-3: oklch(0.4 0 0); /* Dark gray chart color */
-  --chart-4: oklch(0.5 0.2 25); /* Red variant */
-  --chart-5: oklch(0.9 0 0); /* Light gray */
-  --sidebar: oklch(0.02 0 0); /* Very dark sidebar */
-  --sidebar-foreground: oklch(1 0 0);
-  --sidebar-primary: oklch(0.6 0.2 0); /* Red primary */
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.08 0 0);
-  --sidebar-accent-foreground: oklch(1 0 0);
-  --sidebar-border: oklch(0.1 0 0);
-  --sidebar-ring: oklch(0.3 0 0);
+  /* Maintained dark theme consistency */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
 }
 
 @theme inline {
-  --font-sans: var(--font-inter);
-
-  /* Updated FocusForge Color System for jet black theme */
-  --color-focusforge-black: #000000;
-  --color-focusforge-white: #ffffff;
-  --color-focusforge-red: #ef4444;
-  --color-focusforge-red-dark: #dc2626;
-  --color-focusforge-red-light: #f87171;
-  --color-focusforge-gray: #0a0a0a; /* Very dark gray */
-  --color-focusforge-gray-light: #1a1a1a; /* Slightly lighter */
-  --color-focusforge-gray-medium: #2a2a2a; /* Medium gray */
-
+  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -124,7 +114,16 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* Updated global styles for jet black theme */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Clean global styles without malformed CSS */
 * {
   box-sizing: border-box;
 }
@@ -134,15 +133,16 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #000000; /* Pure black background */
-  color: #ffffff; /* Pure white text */
-  font-family: var(--font-sans);
-  font-weight: 300;
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Enhanced animations for jet black theme */
+/* Enhanced animations for modern feel */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -168,10 +168,10 @@ body {
 @keyframes glow {
   0%,
   100% {
-    box-shadow: 0 0 5px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 0 5px rgba(16, 185, 129, 0.3);
   }
   50% {
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
   }
 }
 
@@ -187,36 +187,31 @@ body {
   animation: glow 2s ease-in-out infinite;
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+/* Custom utility classes for FocusForge branding */
+.bg-focusforge-primary {
+  background-color: oklch(0.205 0 0);
 }
 
-/* Custom utility classes for jet black theme */
-.bg-jet-black {
-  background-color: #000000;
+.bg-focusforge-accent {
+  background-color: oklch(0.97 0 0);
 }
 
-.bg-dark-gray {
-  background-color: #0a0a0a;
+.text-focusforge-primary {
+  color: oklch(0.205 0 0);
 }
 
-.bg-medium-gray {
-  background-color: #1a1a1a;
+.text-focusforge-accent {
+  color: oklch(0.97 0 0);
 }
 
-.text-focusforge-red {
-  color: #ef4444;
+.border-focusforge-primary {
+  border-color: oklch(0.205 0 0);
 }
 
-.border-focusforge-red {
-  border-color: #ef4444;
+.hover\:bg-focusforge-primary:hover {
+  background-color: oklch(0.205 0 0);
 }
 
-.hover\:bg-focusforge-red:hover {
-  background-color: #ef4444;
+.hover\:bg-focusforge-accent:hover {
+  background-color: oklch(0.97 0 0);
 }

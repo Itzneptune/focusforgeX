@@ -27,10 +27,11 @@ export async function signInAction(formData: FormData) {
 export async function signUpAction(formData: FormData) {
   const email = formData.get("email") as string
   const password = formData.get("password") as string
-  const name = formData.get("name") as string
+  const username = formData.get("username") as string
+  const fullName = formData.get("fullName") as string
 
-  if (!email || !password) {
-    return { error: "Email and password are required" }
+  if (!email || !password || !username) {
+    return { error: "Email, password, and username are required" }
   }
 
   if (password.length < 6) {
@@ -38,7 +39,7 @@ export async function signUpAction(formData: FormData) {
   }
 
   try {
-    const { user, token } = await signUp(email, password, name || undefined)
+    const { user, token } = await signUp(email, password, username, fullName || undefined)
     setAuthCookie(token)
 
     // Redirect to dashboard after successful signup
@@ -53,10 +54,10 @@ export async function signOutAction() {
   redirect("/auth/login")
 }
 
-export async function logStudySessionAction(userId: string, subject: string, durationMinutes: number, topic?: string) {
+export async function logStudySessionAction(userId: number, subject: string, durationMinutes: number, notes?: string) {
   try {
-    await createStudySession(userId, subject, durationMinutes, topic)
-    revalidatePath("/")
+    await createStudySession(userId, subject, durationMinutes, notes)
+    revalidatePath("/dashboard")
     return { success: true }
   } catch (error) {
     return { error: error instanceof Error ? error.message : "Failed to log study session" }
@@ -64,18 +65,15 @@ export async function logStudySessionAction(userId: string, subject: string, dur
 }
 
 export async function logFitnessSessionAction(
-  userId: string,
+  userId: number,
   activityType: string,
   durationMinutes?: number,
-  activityName?: string,
-  distanceKm?: number,
-  weightKg?: number,
-  sets?: number,
-  reps?: number,
+  caloriesBurned?: number,
+  notes?: string,
 ) {
   try {
-    await createFitnessSession(userId, activityType, durationMinutes, activityName, distanceKm, weightKg, sets, reps)
-    revalidatePath("/")
+    await createFitnessSession(userId, activityType, durationMinutes, caloriesBurned, notes)
+    revalidatePath("/dashboard")
     return { success: true }
   } catch (error) {
     return { error: error instanceof Error ? error.message : "Failed to log fitness session" }

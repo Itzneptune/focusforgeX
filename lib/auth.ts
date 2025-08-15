@@ -33,7 +33,7 @@ export async function verifyPassword(password: string, hashedPassword: string): 
   return bcrypt.compare(password, hashedPassword)
 }
 
-export function generateToken(userId: string): string {
+export function generateToken(userId: number): string {
   const header = {
     alg: "HS256",
     typ: "JWT",
@@ -51,7 +51,7 @@ export function generateToken(userId: string): string {
   return `${encodedHeader}.${encodedPayload}.${signature}`
 }
 
-export function verifyToken(token: string): { userId: string } | null {
+export function verifyToken(token: string): { userId: number } | null {
   try {
     const [encodedHeader, encodedPayload, signature] = token.split(".")
 
@@ -91,14 +91,19 @@ export async function getCurrentUser(): Promise<User | null> {
   return getUserById(payload.userId)
 }
 
-export async function signUp(email: string, password: string, name?: string): Promise<{ user: User; token: string }> {
+export async function signUp(
+  email: string,
+  password: string,
+  username: string,
+  fullName?: string,
+): Promise<{ user: User; token: string }> {
   const existingUser = await getUserByEmail(email)
   if (existingUser) {
     throw new Error("User already exists")
   }
 
   const hashedPassword = await hashPassword(password)
-  const user = await createUser(email, hashedPassword, name)
+  const user = await createUser(email, hashedPassword, username, fullName)
   const token = generateToken(user.id)
 
   return { user, token }

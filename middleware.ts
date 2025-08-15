@@ -26,9 +26,8 @@ export function middleware(request: NextRequest) {
       return response
     }
 
-    // If valid token and trying to access auth pages, redirect to home
     if (payload && isPublicRoute) {
-      return NextResponse.redirect(new URL("/", request.url))
+      return NextResponse.redirect(new URL("/dashboard", request.url))
     }
   }
 
