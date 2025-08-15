@@ -12,24 +12,25 @@ import { signUpAction } from "@/lib/actions"
 export default function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
-  const [success, setSuccess] = useState("")
   const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
-  setError("")
-  setIsLoading(true)
+  const handleSubmit = async (formData: FormData) => {
+    setError("")
+    setIsLoading(true)
 
-  const formData = new FormData(e.target as HTMLFormElement)
-  const result = await signUpAction(formData)
-  
-  setIsLoading(false)
-  
-  if (result?.error) {
-    setError(result.error)
+    try {
+      const result = await signUpAction(formData)
+
+      if (result?.error) {
+        setError(result.error)
+        setIsLoading(false)
+      }
+      // If no error, the server action will handle the redirect
+    } catch (error) {
+      setError("An unexpected error occurred")
+      setIsLoading(false)
+    }
   }
-  // If no error, the server action will handle the redirect
-}
 
   return (
     <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
@@ -43,16 +44,17 @@ export default function SignUpForm() {
         <CardDescription className="text-zinc-400">Create your account to start tracking your progress</CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={handleSubmit} className="space-y-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            const formData = new FormData(e.target as HTMLFormElement)
+            handleSubmit(formData)
+          }}
+          className="space-y-4"
+        >
           {error && (
             <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
               {error}
-            </div>
-          )}
-
-          {success && (
-            <div className="bg-green-500/10 border border-green-500/50 text-green-400 px-4 py-3 rounded-lg text-sm">
-              {success}
             </div>
           )}
 

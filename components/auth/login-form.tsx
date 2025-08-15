@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,23 +11,24 @@ import { signInAction } from "@/lib/actions"
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
-  const router = useRouter()
 
-  const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault()
-  setError("")
-  setIsLoading(true)
+  const handleSubmit = async (formData: FormData) => {
+    setError("")
+    setIsLoading(true)
 
-  const formData = new FormData(e.target as HTMLFormElement)
-  const result = await signInAction(formData)
-  
-  setIsLoading(false)
-  
-  if (result?.error) {
-    setError(result.error)
+    try {
+      const result = await signInAction(formData)
+
+      if (result?.error) {
+        setError(result.error)
+        setIsLoading(false)
+      }
+      // If no error, the server action will handle the redirect
+    } catch (error) {
+      setError("An unexpected error occurred")
+      setIsLoading(false)
+    }
   }
-  // If no error, the server action will handle the redirect
-}
 
   return (
     <Card className="w-full max-w-md bg-zinc-900 border-zinc-800">
@@ -42,7 +42,7 @@ export default function LoginForm() {
         <CardDescription className="text-zinc-400">Sign in to track your fitness and study progress</CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
             <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg text-sm">
               {error}

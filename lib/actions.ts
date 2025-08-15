@@ -7,19 +7,20 @@ import { revalidatePath } from "next/cache"
 
 export async function signInAction(formData: FormData) {
   try {
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    
-    const user = await signIn(email, password)
-    if (user) {
-      const token = await createJWT({ userId: user.id, email: user.email })
-      await setAuthCookie(token)
-      redirect('/')
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+
+    if (!email || !password) {
+      return { error: "Email and password are required" }
     }
-    
-    return { error: 'Invalid credentials' }
+
+    const { user, token } = await signIn(email, password)
+    setAuthCookie(token)
+
+    // Redirect to dashboard after successful login
+    redirect("/dashboard")
   } catch (error) {
-    return { error: 'Login failed' }
+    return { error: error instanceof Error ? error.message : "Login failed" }
   }
 }
 
@@ -39,7 +40,9 @@ export async function signUpAction(formData: FormData) {
   try {
     const { user, token } = await signUp(email, password, name || undefined)
     setAuthCookie(token)
-    return { success: true, user }
+
+    // Redirect to dashboard after successful signup
+    redirect("/dashboard")
   } catch (error) {
     return { error: error instanceof Error ? error.message : "Sign up failed" }
   }
